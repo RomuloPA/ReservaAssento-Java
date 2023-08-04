@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
     static char[][] assentos = new char[18][24];
@@ -10,6 +11,8 @@ public class App {
     public static void main(String[] args) throws Exception {
         System.out.println("Reserva Assento");
         vetorAssentos();
+        exibirAssentos();
+        reservarAssento();
         exibirAssentos();
     }
 
@@ -43,7 +46,11 @@ public class App {
                 if (isAssentoVazio(i, j)) {
                     System.out.print("   "); // Assento vazio (três espaços em branco)
                 } else {
-                    System.out.print("[" + assentos[i][j] + "]");
+                    if (assentos[i][j] == 'X') {
+                        System.out.print("\u001B[31m[X]\u001B[0m"); // [X] in red
+                    } else {
+                        System.out.print("\u001B[32m[" + assentos[i][j] + "]\u001B[0m"); // [O] in green
+                    }
                 }
                 if (j == 3) {
                     System.out.print(" ");
@@ -116,6 +123,33 @@ public class App {
             }
         }
         return false;
+    }
+
+    public static void reservarAssento() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite a linha da fileira (A a R): ");
+        String fileiraEscolhida = scanner.nextLine();
+        char fileira = fileiraEscolhida.toUpperCase().charAt(0);
+
+        System.out.print("Digite o número da coluna (1 a 24): ");
+        int coluna = Integer.parseInt(scanner.nextLine());
+
+        if (fileira >= 'A' && fileira <= 'R' && coluna >= 1 && coluna <= 24) {
+            int linhaIndex = fileira - 'A';
+            int colunaIndex = coluna - 1;
+
+            if (!isAssentoVazio(linhaIndex, colunaIndex) && assentos[linhaIndex][colunaIndex] == 'O') {
+                assentos[linhaIndex][colunaIndex] = 'X';
+                System.out.println("Assento reservado com sucesso!");
+            } else {
+                System.out.println("Assento já está ocupado ou é inválido!");
+            }
+        } else {
+            System.out.println("Linha ou coluna inválida!");
+        }
+
+        scanner.close();
     }
 
 }
