@@ -9,11 +9,34 @@ public class App {
     static List<int[]> assentosVazios = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Reserva Assento");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        System.out.println("Bem vindo ao Cinema Pipoca!");
+        System.out.println("Clique no botão ENTER para prosseguir:");
+        scanner.nextLine();
+        fluxoSistema(scanner);
+        scanner.close();
+    }
+
+    public static void fluxoSistema(Scanner scanner) {
+        boolean sair = false;
         vetorAssentos();
         exibirAssentos();
         reservarAssento();
         exibirAssentos();
+
+        while (!sair) {
+            System.out.print("Deseja fazer outra reserva? (S/N): ");
+            String escolha = scanner.nextLine();
+            if (escolha.equalsIgnoreCase("N")) {
+                sair = true;
+                break;
+            }
+
+            exibirAssentos();
+            reservarAssento();
+            exibirAssentos();
+        }
     }
 
     public static void vetorAssentos() {
@@ -148,8 +171,6 @@ public class App {
         } else {
             System.out.println("Linha ou coluna inválida!");
         }
-
-        scanner.close();
     }
 
 }
