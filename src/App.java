@@ -7,15 +7,19 @@ public class App {
 
     static List<int[]> assentosVazios = new ArrayList<>();
 
+    static boolean[][] assentosReservados = new boolean[18][24];
+
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        limparTela();
-        System.out.println();
-        System.out.println("Bem vindo ao Cinema Pipoca!");
-        System.out.println("Clique no botão ENTER para prosseguir:");
-        scanner.nextLine();
-        fluxoSistema(scanner);
-        scanner.close();
+
+        while (true) {
+            limparTela();
+            System.out.println();
+            System.out.println("Bem vindo ao Cinema Pipoca!");
+            System.out.println("Clique no botão ENTER para prosseguir:");
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextLine();
+            fluxoSistema(scanner);
+        }
     }
 
     public static void fluxoSistema(Scanner scanner) {
@@ -36,7 +40,7 @@ public class App {
                 sair = true;
                 break;
             } else if (escolha.equalsIgnoreCase("S")) {
-                /* limparTela(); */
+                limparTela();
                 exibirAssentos();
                 reservarAssento();
                 /* limparTela(); */
@@ -159,35 +163,39 @@ public class App {
     public static void reservarAssento() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Digite a linha da fileira (A a R): ");
-        String fileiraEscolhida = scanner.nextLine();
-        char fileira = fileiraEscolhida.toUpperCase().charAt(0);
+        while (true) {
+            System.out.print("Digite a linha da fileira (A a R): ");
+            String fileiraEscolhida = scanner.nextLine();
+            char fileira = fileiraEscolhida.toUpperCase().charAt(0);
 
-        System.out.print("Digite o número da coluna (1 a 24): ");
-        int coluna = Integer.parseInt(scanner.nextLine());
+            System.out.print("Digite o número da coluna (1 a 24): ");
+            int coluna = Integer.parseInt(scanner.nextLine());
 
-        if (fileira >= 'A' && fileira <= 'R' && coluna >= 1 && coluna <= 24) {
-            int linhaIndex = fileira - 'A';
-            int colunaIndex = coluna - 1;
+            if (fileira >= 'A' && fileira <= 'R' && coluna >= 1 && coluna <= 24) {
+                int linhaIndex = fileira - 'A';
+                int colunaIndex = coluna - 1;
 
-            boolean isAssentoVazio = false;
-            for (int[] assentoVazio : assentosVazios) {
-                if (assentoVazio[0] == linhaIndex && assentoVazio[1] == colunaIndex) {
-                    isAssentoVazio = true;
-                    break;
+                boolean isAssentoVazio = false;
+                for (int[] assentoVazio : assentosVazios) {
+                    if (assentoVazio[0] == linhaIndex && assentoVazio[1] == colunaIndex) {
+                        isAssentoVazio = true;
+                        break;
+                    }
                 }
-            }
 
-            if (isAssentoVazio) {
-                System.out.println("Linha ou coluna inválida!");
-            } else if (assentos[linhaIndex][colunaIndex] == 'O') {
-                assentos[linhaIndex][colunaIndex] = 'X';
-                System.out.println("Assento reservado com sucesso!");
+                if (isAssentoVazio) {
+                    System.out.println("Linha ou coluna inválida!");
+                } else if (assentos[linhaIndex][colunaIndex] == 'O') {
+                    assentos[linhaIndex][colunaIndex] = 'X';
+                    limparTela();
+                    System.out.println("Assento reservado com sucesso!");
+                    return;
+                } else {
+                    System.out.println("Assento já está ocupado!");
+                }
             } else {
-                System.out.println("Assento já está ocupado!");
+                System.out.println("Linha ou coluna inválida!");
             }
-        } else {
-            System.out.println("Linha ou coluna inválida!");
         }
     }
 
