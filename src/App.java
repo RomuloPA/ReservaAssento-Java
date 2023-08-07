@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class App {
     static char[][] assentos = new char[18][24];
 
-    // Lista de coordenadas dos assentos vazios
     static List<int[]> assentosVazios = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
+        limparTela();
         System.out.println();
         System.out.println("Bem vindo ao Cinema Pipoca!");
         System.out.println("Clique no botão ENTER para prosseguir:");
@@ -19,23 +19,31 @@ public class App {
     }
 
     public static void fluxoSistema(Scanner scanner) {
+
         boolean sair = false;
+        limparTela();
         vetorAssentos();
         exibirAssentos();
         reservarAssento();
+        /* limparTela(); */
         exibirAssentos();
 
         while (!sair) {
             System.out.print("Deseja fazer outra reserva? (S/N): ");
             String escolha = scanner.nextLine();
+
             if (escolha.equalsIgnoreCase("N")) {
                 sair = true;
                 break;
+            } else if (escolha.equalsIgnoreCase("S")) {
+                /* limparTela(); */
+                exibirAssentos();
+                reservarAssento();
+                /* limparTela(); */
+                exibirAssentos();
+            } else {
+                System.out.println("Opção inválida! Digite 'S' ou 'N'.");
             }
-
-            exibirAssentos();
-            reservarAssento();
-            exibirAssentos();
         }
     }
 
@@ -57,9 +65,9 @@ public class App {
         int linha = 1;
 
         System.out.println();
-        System.out.println("           -------------------------------------------------------");
-        System.out.println("          |                       T  E  L  A                      |");
-        System.out.println("           -------------------------------------------------------");
+        System.out.println("           ----------------------------------------------------------");
+        System.out.println("          |                        T  E  L  A                        |");
+        System.out.println("           ----------------------------------------------------------");
         System.out.println();
         System.out.println();
 
@@ -67,12 +75,12 @@ public class App {
             System.out.print(fileira + "  ");
             for (int j = 0; j < 24; j++) {
                 if (isAssentoVazio(i, j)) {
-                    System.out.print("   "); // Assento vazio (três espaços em branco)
+                    System.out.print("   ");
                 } else {
                     if (assentos[i][j] == 'X') {
-                        System.out.print("\u001B[31m[X]\u001B[0m"); // [X] in red
+                        System.out.print("\u001B[31m[X]\u001B[0m");
                     } else {
-                        System.out.print("\u001B[32m[" + assentos[i][j] + "]\u001B[0m"); // [O] in green
+                        System.out.print("\u001B[32m[" + assentos[i][j] + "]\u001B[0m");
                     }
                 }
                 if (j == 3) {
@@ -162,14 +170,32 @@ public class App {
             int linhaIndex = fileira - 'A';
             int colunaIndex = coluna - 1;
 
-            if (!isAssentoVazio(linhaIndex, colunaIndex) && assentos[linhaIndex][colunaIndex] == 'O') {
+            boolean isAssentoVazio = false;
+            for (int[] assentoVazio : assentosVazios) {
+                if (assentoVazio[0] == linhaIndex && assentoVazio[1] == colunaIndex) {
+                    isAssentoVazio = true;
+                    break;
+                }
+            }
+
+            if (isAssentoVazio) {
+                System.out.println("Linha ou coluna inválida!");
+            } else if (assentos[linhaIndex][colunaIndex] == 'O') {
                 assentos[linhaIndex][colunaIndex] = 'X';
                 System.out.println("Assento reservado com sucesso!");
             } else {
-                System.out.println("Assento já está ocupado ou é inválido!");
+                System.out.println("Assento já está ocupado!");
             }
         } else {
             System.out.println("Linha ou coluna inválida!");
+        }
+    }
+
+    public static void limparTela() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
