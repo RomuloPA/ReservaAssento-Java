@@ -7,10 +7,9 @@ public class App {
 
     static List<int[]> assentosVazios = new ArrayList<>();
 
-    static boolean[][] assentosReservados = new boolean[18][24];
-
     public static void main(String[] args) throws Exception {
 
+        vetorAssentos();
         while (true) {
             limparTela();
             System.out.println();
@@ -26,10 +25,9 @@ public class App {
 
         boolean sair = false;
         limparTela();
-        vetorAssentos();
+        /* vetorAssentos(); */
         exibirAssentos();
         reservarAssento();
-        /* limparTela(); */
         exibirAssentos();
 
         while (!sair) {
@@ -43,7 +41,6 @@ public class App {
                 limparTela();
                 exibirAssentos();
                 reservarAssento();
-                /* limparTela(); */
                 exibirAssentos();
             } else {
                 System.out.println("Opção inválida! Digite 'S' ou 'N'.");
